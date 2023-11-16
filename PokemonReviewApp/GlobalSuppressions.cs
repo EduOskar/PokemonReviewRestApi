@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>", Scope = "member", Target = "~M:PokemonReviewApp.Controllers.PokemonController.#ctor(PokemonReviewApp.Repository.Contracts.IPokemonRepository)")]
+[assembly: SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>", Scope = "member", Target = "~M:PokemonReviewApp.Repository.CategoryRepository.#ctor(PokemonReviewApp.Data.DataContext)")]

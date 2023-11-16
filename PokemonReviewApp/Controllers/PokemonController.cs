@@ -22,9 +22,10 @@ namespace PokemonReviewApp.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public  async Task<ActionResult<Pokemon>> GetPokemons()
+        public  async Task<ActionResult<IEnumerable<Pokemon>>> GetPokemons()
         {
-            var pokemons = _mapper.Map<List<PokemonDto>>(await _pokemonRepository.GetPokemons());
+            var pokemons = _mapper.Map<List<PokemonDto>>(
+                await _pokemonRepository.GetPokemons());
 
             if (!ModelState.IsValid)
             {
@@ -44,7 +45,8 @@ namespace PokemonReviewApp.Controllers
                 return NotFound();
             }
 
-            var pokemon = _mapper.Map<PokemonDto>( await _pokemonRepository.GetPokemon(pokeId));
+            var pokemon = _mapper.Map<PokemonDto>(
+                await _pokemonRepository.GetPokemon(pokeId));
 
             if (!ModelState.IsValid)
             {
@@ -57,7 +59,7 @@ namespace PokemonReviewApp.Controllers
         [HttpGet("{pokeId:int}/rating")]
         [ProducesResponseType(200, Type = typeof(decimal))]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<Pokemon>> GetPokemonRating(int pokeId)
+        public async Task<ActionResult<IEnumerable<Pokemon>>> GetPokemonRating(int pokeId)
         {
             if (await _pokemonRepository.PokemonExist(pokeId) == false)
             {

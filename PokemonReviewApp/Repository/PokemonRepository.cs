@@ -63,7 +63,7 @@ namespace PokemonReviewApp.Repository
         {
             var pokemonExist = await _dataContext.Pokemon.AnyAsync(p => p.Id == pokeId);
 
-            if (pokemonExist == true)
+            if (pokemonExist)
             {
                 return pokemonExist;
             }
