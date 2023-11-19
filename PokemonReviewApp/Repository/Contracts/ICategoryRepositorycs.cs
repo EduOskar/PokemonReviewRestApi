@@ -8,5 +8,8 @@ namespace PokemonReviewApp.Repository.Contracts
         Task<Category> GetCategory(int id);
         Task<ICollection<Pokemon>> GetPokemonByCategory(int categoryId);
         Task<bool> CategoryExist(int Id);
+        Task<bool> CreateCategory(Category category);
+
+        Task<bool> Save();
     }
 }

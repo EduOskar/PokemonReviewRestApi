@@ -28,6 +28,15 @@ namespace PokemonReviewApp.Repository
             throw new Exception("Country do not exist");
         }
 
+        public async Task<bool> CreateCountry(Country country)
+        {
+            await _dataContext.AddAsync(country);
+
+            await Save();
+
+            return true;
+        }
+
         public async Task<ICollection<Country>> GetCountries()
         {
             var countries = await _dataContext.Countries.ToListAsync();
@@ -77,6 +86,13 @@ namespace PokemonReviewApp.Repository
 
             throw new Exception("There was no owners from that country");
 
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = await _dataContext.SaveChangesAsync();
+
+            return saved > 0;
         }
     }
 }

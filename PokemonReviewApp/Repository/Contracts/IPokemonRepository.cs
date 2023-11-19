@@ -9,5 +9,7 @@ namespace PokemonReviewApp.Repository.Contracts
         Task<Pokemon> GetPokemon(string name);
         Task<decimal> GetPokemonRating(int pokeId);
         Task<bool> PokemonExist(int pokeId);
+        Task<bool> CreatePokemon(int ownerId, int categoryId, Pokemon pokemon);
+        Task<bool> Save();
     }
 }

@@ -27,6 +27,16 @@ namespace PokemonReviewApp.Repository
 
         }
 
+        public async Task<bool> CreateCategory(Category category)
+        {
+            await _dataContext.AddAsync(category);
+            
+            await Save();
+
+            return true;
+            
+        }
+
         public async Task<ICollection<Category>> GetCategories()
         {
             var categories = await _dataContext.Categories.ToListAsync();
@@ -64,6 +74,13 @@ namespace PokemonReviewApp.Repository
             }
 
             throw new Exception("Id didn't belong to any category");
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = await _dataContext.SaveChangesAsync();
+
+            return saved > 0;
         }
     }
 }

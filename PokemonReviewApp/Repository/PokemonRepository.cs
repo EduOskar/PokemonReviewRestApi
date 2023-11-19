@@ -15,6 +15,32 @@ namespace PokemonReviewApp.Repository
             _dataContext = dataContext;
         }
 
+        public async Task<bool> CreatePokemon(int ownerId, int categoryId, Pokemon pokemon)
+        {
+            var PokemonOwnerEntity = await _dataContext.Owners.Where(o => o.Id == ownerId).FirstOrDefaultAsync();
+            var category = await _dataContext.Categories.Where(c => c.Id == categoryId).FirstOrDefaultAsync();
+
+            var pokemonOwner = new PokemonOwner()
+            {
+                Owner = PokemonOwnerEntity,
+                Pokemon = pokemon,
+            }; 
+
+            _dataContext.Add(pokemonOwner);
+
+            var pokemonCategory = new PokemonCategory()
+            {
+                Category = category,
+                Pokemon = pokemon,
+            };
+
+            _dataContext.Add(pokemonCategory);
+
+            _dataContext.Add(pokemon);
+
+            return true;
+        }
+
         public async Task<Pokemon> GetPokemon(int pokeId)
         {
             var pokemon = await _dataContext.Pokemon.FindAsync(pokeId);
@@ -69,6 +95,12 @@ namespace PokemonReviewApp.Repository
             }
 
             return false!;
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = await _dataContext.SaveChangesAsync();
+            return saved > 0;
         }
     }
 }
