@@ -8,5 +8,9 @@ namespace PokemonReviewApp.Repository.Contracts
         Task<Reviewer> GetReviewer(int reviewerId);
         Task<ICollection<Review>> GetReviewsByReviewer(int reviewerId);
         Task<bool> ReviewerExist(int reviewerId);
+        Task<bool> CreateReviewer(Reviewer reviewer);
+        Task<bool> UpdateReviewer(Reviewer reviewer);
+        Task<bool> DeleteReviewer(Reviewer reviewer);
+        Task<bool> Save();
     }
 }

@@ -107,5 +107,68 @@ namespace PokemonReviewApp.Controllers
 
             return Ok("Succesfully Created");
         }
+
+        [HttpPut("{ownerId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> UpdateOwner(int ownerId, [FromBody] OwnerDto updatedOwner)
+        {
+            if (updatedOwner == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (ownerId != updatedOwner.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (! await _ownerRepository.OwnerExist(ownerId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var ownerMap = _mapper.Map<Owner>(updatedOwner);
+
+            if (! await _ownerRepository.UpdateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{ownerId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> DeleteOwner(int ownerId)
+        {
+            if (!await _ownerRepository.OwnerExist(ownerId))
+            {
+                return NotFound();
+            }
+
+            var ownerDelete = await _ownerRepository.GetOwner(ownerId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _ownerRepository.DeleteOwner(ownerDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the category");
+            }
+
+            return NoContent();
+
+        }
     }
 }

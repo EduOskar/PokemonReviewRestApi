@@ -16,6 +16,20 @@ namespace PokemonReviewApp.Repository
             _dataContext = dataContext;
         }
 
+        public async Task<bool> CreateReviewer(Reviewer reviewer)
+        {
+            await _dataContext.AddAsync(reviewer);
+
+            return await Save();
+        }
+
+        public async Task<bool> DeleteReviewer(Reviewer reviewer)
+        {
+            _dataContext.Remove(reviewer);
+
+            return await Save();
+        }
+
         public async Task<Reviewer> GetReviewer(int reviewerId)
         {
             var reviewer = await _dataContext.Reviewers.Where(
@@ -69,6 +83,20 @@ namespace PokemonReviewApp.Repository
 
             return false;
 
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = await _dataContext.SaveChangesAsync();
+
+            return saved > 0;
+        }
+
+        public async Task<bool> UpdateReviewer(Reviewer reviewer)
+        {
+            _dataContext.Update(reviewer);
+            
+            return await Save();
         }
     }
 }

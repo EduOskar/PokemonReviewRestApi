@@ -38,7 +38,14 @@ namespace PokemonReviewApp.Repository
 
             _dataContext.Add(pokemon);
 
-            return true;
+            return await Save();
+        }
+
+        public async Task<bool> DeletePokemon(Pokemon pokemon)
+        {
+            _dataContext.Remove(pokemon);
+
+            return await Save();
         }
 
         public async Task<Pokemon> GetPokemon(int pokeId)
@@ -101,6 +108,13 @@ namespace PokemonReviewApp.Repository
         {
             var saved = await _dataContext.SaveChangesAsync();
             return saved > 0;
+        }
+
+        public async Task<bool> UpdatePokemon(int ownerId, int categoryId, Pokemon pokemon)
+        {
+            _dataContext.Update(pokemon);
+
+            return await Save();
         }
     }
 }

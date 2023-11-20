@@ -10,7 +10,7 @@ namespace PokemonReviewApp.Repository
     {
         private readonly DataContext _dataContext;
 
-        public CountryRepository(DataContext dataContext )
+        public CountryRepository(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
@@ -32,9 +32,14 @@ namespace PokemonReviewApp.Repository
         {
             await _dataContext.AddAsync(country);
 
-            await Save();
+            return await Save();
+        }
 
-            return true;
+        public async Task<bool> DeleteCountry(Country country)
+        {
+             _dataContext.Remove(country);
+
+            return await Save();    
         }
 
         public async Task<ICollection<Country>> GetCountries()
@@ -93,6 +98,13 @@ namespace PokemonReviewApp.Repository
             var saved = await _dataContext.SaveChangesAsync();
 
             return saved > 0;
+        }
+
+        public async Task<bool> UpdateCountry(Country country)
+        {
+            _dataContext.Update(country);
+
+            return await Save();
         }
     }
 }

@@ -19,9 +19,14 @@ namespace PokemonReviewApp.Repository
         {
             await _dataContext.AddAsync(owner);
 
-            await Save();
+            return await Save();
+        }
 
-            return true;
+        public async Task<bool> DeleteOwner(Owner owner)
+        {
+            _dataContext.Remove(owner);
+
+            return await Save();
         }
 
         public async Task<Owner> GetOwner(int ownerId)
@@ -77,6 +82,13 @@ namespace PokemonReviewApp.Repository
             var saved = await _dataContext.SaveChangesAsync();
 
             return saved > 0;
+        }
+
+        public async Task<bool> UpdateOwner(Owner owner)
+        {
+            _dataContext.Update(owner);
+
+            return await Save();
         }
     }
 }

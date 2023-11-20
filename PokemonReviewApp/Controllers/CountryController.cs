@@ -98,13 +98,76 @@ namespace PokemonReviewApp.Controllers
 
             var countryMap = _mapper.Map<Country>(countryCreate);
 
-            if (! await _countryRepository.CreateCountry(countryMap))
+            if (!await _countryRepository.CreateCountry(countryMap))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Ok("Succesfully Created");
+        }
+
+        [HttpPut("{countryId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> UpdateCountry(int  countryId, [FromBody] CountryDto updatedCountry)
+        {
+            if (updatedCountry == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (countryId != updatedCountry.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (! await _countryRepository.CountryExist(countryId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var countryMap = _mapper.Map<Country>(updatedCountry);
+
+            if (!await _countryRepository.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong with updating the country");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{countryId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> DeleteCountry(int countryId)
+        {
+            if (!await _countryRepository.CountryExist(countryId))
+            {
+                return NotFound();
+            }
+
+            var countryDelete = await _countryRepository.GetCountry(countryId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _countryRepository.DeleteCountry(countryDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the category");
+            }
+
+            return NoContent();
+
         }
 
     }

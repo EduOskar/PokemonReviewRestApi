@@ -10,6 +10,8 @@ namespace PokemonReviewApp.Repository.Contracts
         Task<ICollection<Owner>> GetOwnersFromACountry(int countryId);
         Task<bool> CountryExist(int id);
         Task<bool> CreateCountry(Country country);
+        Task<bool> UpdateCountry(Country country);
+        Task<bool> DeleteCountry(Country country);
         Task<bool> Save();
     }
 }

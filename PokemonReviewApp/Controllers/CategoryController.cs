@@ -22,7 +22,7 @@ namespace PokemonReviewApp.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories() 
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             var categories = _mapper.Map<List<CategoryDto>>(
                 await _categoryRepositorycs.GetCategories());
@@ -95,14 +95,79 @@ namespace PokemonReviewApp.Controllers
 
             var categoryMap = _mapper.Map<Category>(categoryCreate);
 
-            if (! await _categoryRepositorycs.CreateCategory(categoryMap)) 
+            if (!await _categoryRepositorycs.CreateCategory(categoryMap))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Ok("Succesfully created");
-                
-        } 
+
+        }
+
+        [HttpPut("{categoryId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> UpdateCategory(int categoryId, [FromBody] CategoryDto updatedCategory)
+        {
+            if (updatedCategory == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (categoryId != updatedCategory.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _categoryRepositorycs.CategoryExist(categoryId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var categoryMap = _mapper.Map<Category>(updatedCategory);
+
+            if (!await _categoryRepositorycs.UpdateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{categoryId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> DeleteCategory(int categoryId)
+        {
+            if (!await _categoryRepositorycs.CategoryExist(categoryId))
+            {
+                return NotFound();
+            }
+
+            var categoryDelete = await _categoryRepositorycs.GetCategory(categoryId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (! await _categoryRepositorycs.DeleteCategory(categoryDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the category");
+            }
+
+            return NoContent();
+
+        }
+
     }
 }

@@ -10,6 +10,8 @@ namespace PokemonReviewApp.Repository.Contracts
         Task<ICollection<Pokemon>> GetPokemonByOwner(int ownerId);
         Task<bool> OwnerExist(int ownerId);
         Task<bool> CreateOwner(Owner owner);
+        Task<bool> UpdateOwner(Owner owner);
+        Task<bool> DeleteOwner(Owner owner); 
         Task<bool> Save();
     }
 }

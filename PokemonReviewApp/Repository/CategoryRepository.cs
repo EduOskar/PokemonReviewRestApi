@@ -30,11 +30,16 @@ namespace PokemonReviewApp.Repository
         public async Task<bool> CreateCategory(Category category)
         {
             await _dataContext.AddAsync(category);
-            
-            await Save();
 
-            return true;
-            
+            return await Save();
+
+        }
+
+        public async Task<bool> DeleteCategory(Category category)
+        {
+            _dataContext.Remove(category);
+
+            return await Save();
         }
 
         public async Task<ICollection<Category>> GetCategories()
@@ -81,6 +86,12 @@ namespace PokemonReviewApp.Repository
             var saved = await _dataContext.SaveChangesAsync();
 
             return saved > 0;
+        }
+
+        public async Task<bool> UpdateCategory(Category category)
+        {
+            _dataContext.Update(category);
+            return await Save(); 
         }
     }
 }
